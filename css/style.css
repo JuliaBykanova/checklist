@@ -282,6 +282,10 @@ body {
   justify-content: space-evenly;
 }
 
+.question-action-list-active{
+  margin-bottom: 16px;
+}
+
 .question-action-list__item:not(:last-child) {
   margin-right: 24px;
 }
@@ -327,6 +331,27 @@ body {
 .question-select__item {
 	padding: 8px 12px;
 	font-size: 14px;
+  line-height: 24px;
+  color: #fff;
+}
+
+.question-note{
+  flex-direction: column;
+}
+
+.question-note__text{
+  margin-bottom: 8px;
+  font-size: 14px;
+  line-height: 24px;
+	color: #fff;
+}
+
+.question-note__input{
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #95999E;
+  border-radius: 4px;
+  font-size: 14px;
   line-height: 24px;
   color: #fff;
 }
