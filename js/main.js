@@ -28,6 +28,35 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  const noteBtns = document.querySelectorAll('.question-action-list__item-note-btn');
+
+  noteBtns.forEach((noteBtn) => {
+    noteBtn.addEventListener('click', () => {
+      const note = document.createElement('div');
+      const noteText = document.createElement('span');
+      const noteInput = document.createElement('input');
+
+      note.classList.add('question-note', 'flex');
+      noteText.classList.add('question-note__text');
+      noteInput.classList.add('question-note__input', 'input-resert');
+
+      noteInput.type = 'text';
+      noteInput.placeholder = 'Введите текст заметки...';
+      noteText.innerHTML = 'Текст заметки...';
+
+      noteInput.oninput = () => {
+        noteText.innerHTML = noteInput.value;
+      };
+
+      note.append(noteText);
+      note.append(noteInput);
+
+      noteBtn.closest('.question-action-list').classList.add('question-action-list-active');
+      noteBtn.closest('.question-container').append(note);
+    });
+  });
+
+
   window.addEventListener('resize', () => {
     accordionTextGenerator();
     if (window.screen.availWidth >= 600){
