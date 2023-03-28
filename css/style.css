@@ -59,6 +59,7 @@ body {
 }
 
 .container {
+  width: 100%;
   padding: 0 16px;
   margin: 0 auto;
 }
@@ -74,7 +75,7 @@ body {
 .select__header {
 	cursor: pointer;
 }
- 
+
 .select__icon.rotate svg {
 	transform: rotate(180deg);
 }
@@ -212,7 +213,7 @@ body {
 }
 
 .question-answers-list__item-btn-active {
-  background: #c50056;
+  background: #4f8d66;
 }
 
 .question-checkbox {
@@ -279,7 +280,7 @@ body {
 }
 
 .question-action-list {
-  justify-content: space-evenly;
+  justify-content: flex-end;
 }
 
 .question-action-list-active{
@@ -356,6 +357,50 @@ body {
   color: #fff;
 }
 
+/*accordion*/
+
+.accordion{
+  flex-direction: column;
+  margin-bottom: 8px;
+}
+
+.accordion__header{
+  align-items: center;
+  margin-bottom: 8px;
+  padding: 16px 6px;
+  border-radius: 8px;
+  background: #4F8D66;
+  cursor: pointer;
+}
+
+.accordion.is-active .accordion__body {
+	display: block;
+}
+
+.accordion__body {
+  display: none;
+}
+
+.accordion__icon{
+  margin-right: 8px;
+  margin-bottom: 5px;
+}
+
+.accordion__icon svg{
+  transform: rotate(-90deg);
+}
+
+.accordion__icon.rotate svg {
+	transform: rotate(0);
+}
+
+.accordion__title{
+  font-size: 14px;
+  line-height: 16px;
+  color: #fff;
+}
+
+
 
 /*submit*/
 
@@ -368,7 +413,8 @@ body {
 }
 
 .submit__btn {
-  padding: 8px 16px;
+  flex-grow: 1;
+  padding: 16px;
   border-radius: 8px;
   background: #4f8d66;
   font-size: 14px;
@@ -384,7 +430,7 @@ body {
 
 .navigate__btn {
   align-items: center;
-  padding: 8px 16px;
+  padding: 10px 16px;
   border-radius: 8px;
   background: #4f8d66;
 }
