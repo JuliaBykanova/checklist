@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   accordionTextGenerator();
   select();
+  accordion();
 
   if (window.screen.availWidth >= 600){
     countBlock.classList.remove('passive');
@@ -13,20 +14,26 @@ document.addEventListener("DOMContentLoaded", () => {
     countBlock.classList.add('passive');
   };
 
-  const answersBtns = document.querySelectorAll('.question-answers-list__item-btn');
+  const answersLists = document.querySelectorAll('.question-answers-list');
 
-  answersBtns.forEach((answersBtn) => {
-    answersBtn.addEventListener('click', (event) => {
-      for(let i=0; i<answersBtns.length; i++){
-        if(event.currentTarget === answersBtns[i]){
-          answersBtns[i].classList.add('question-answers-list__item-btn-active');
-        } else{
-          answersBtns[i].classList.remove('question-answers-list__item-btn-active');
+  answersLists.forEach((answersList) => {
+    const answersBtns = answersList.querySelectorAll('.question-answers-list__item-btn');
+
+    answersBtns.forEach((answersBtn) => {
+      answersBtn.addEventListener('click', (event) => {
+        for(let i=0; i<answersBtns.length; i++){
+          if(event.currentTarget === answersBtns[i]){
+            answersBtns[i].classList.add('question-answers-list__item-btn-active');
+          } else{
+            answersBtns[i].classList.remove('question-answers-list__item-btn-active');
+          };
         };
-      };
-      accordionTextGenerator();
+        accordionTextGenerator();
+      });
     });
-  });
+  })
+
+  
 
   const noteBtns = document.querySelectorAll('.question-action-list__item-note-btn');
 
@@ -96,6 +103,20 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       select.classList.remove('is-active');
       selectIcon.classList.remove('rotate');
+    }
+  
+  };
+
+  function accordion() {
+    const accordionHeader = document.querySelectorAll('.accordion__header');
+  
+    accordionHeader.forEach(item => {
+      item.addEventListener('click', accordionToggle)
+    });
+  
+    function accordionToggle() {
+      this.parentElement.parentElement.classList.toggle('is-active');
+      this.querySelector('.accordion__icon').classList.toggle('rotate');
     }
   
   };
