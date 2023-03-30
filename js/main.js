@@ -63,6 +63,45 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  const fileInputs = document.querySelectorAll('#file-input');
+
+  fileInputs.forEach((fileInput) => {
+    fileInput.onchange = function () {
+      console.log('Selected file: ' + this.value);
+
+      const fileText = document.createElement('p');
+      fileText.classList.add('question-file__text');
+      fileText.innerHTML = 'Выбранный файл: ' + this.value;
+
+      this.closest('.question-action-list').classList.add('question-action-list-active');
+      this.closest('.question-container').append(fileText);
+    };
+  });
+
+  const navigateBtnNext = document.querySelector('.navigate__btn-next');
+  const navigateBtnBack = document.querySelector('.navigate__btn-back');
+
+  navigateBtnNext.addEventListener('click', () => {
+    navigateBtnNext.classList.add('passive');
+    navigateBtnBack.classList.remove('passive');
+    navigateBtnNext.closest('.navigate-container').classList.add('navigate-container-back');
+    if (window.screen.availWidth >= 600){
+      headerAccordionText.innerText = 'Страница 2 из 2';
+    } else{
+      headerAccordionText.innerText = 'Страница 2 из 2' + ' -' + headerAccordionText.innerHTML.split('-')[1];
+    }
+  });
+
+  navigateBtnBack.addEventListener('click', () => {
+    navigateBtnBack.classList.add('passive');
+    navigateBtnNext.classList.remove('passive');
+    navigateBtnNext.closest('.navigate-container').classList.remove('navigate-container-back');
+    if (window.screen.availWidth >= 600){
+      headerAccordionText.innerText = 'Страница 1 из 1';
+    } else{
+      headerAccordionText.innerText = 'Страница 1 из 2' + ' -' + headerAccordionText.innerHTML.split('-')[1];
+    }
+  });
 
   window.addEventListener('resize', () => {
     accordionTextGenerator();
