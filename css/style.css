@@ -216,8 +216,16 @@ body {
   background: #40444b;
 }
 
-.question-answers-list__item-btn-active {
+.yes-btn.question-answers-list__item-btn-active {
   background: #4f8d66;
+}
+
+.no-btn.question-answers-list__item-btn-active {
+  background:#C50056;
+}
+
+.dn-btn.question-answers-list__item-btn-active {
+  background:#C50056;
 }
 
 .question-checkbox {
