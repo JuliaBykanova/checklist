@@ -2,8 +2,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const headerAccordionText = document.querySelector('.header-accordion__text');
   const countBlock = document.querySelector('.header__count-block');
   const countText = document.querySelector('.header__count');
+  const answersLists = document.querySelectorAll('.question-answers-list');
 
-  accordionTextGenerator();
+  accordionTextGenerator(5, 5, 5);
   select();
   accordion();
 
@@ -14,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
     countBlock.classList.add('passive');
   };
 
-  const answersLists = document.querySelectorAll('.question-answers-list');
+  
 
   answersLists.forEach((answersList) => {
     const answersBtns = answersList.querySelectorAll('.question-answers-list__item-btn');
@@ -28,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
             answersBtns[i].classList.remove('question-answers-list__item-btn-active');
           };
         };
-        accordionTextGenerator();
+        accordionTextGenerator(5, 5, 5);
       });
     });
   })
@@ -104,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   window.addEventListener('resize', () => {
-    accordionTextGenerator();
+    accordionTextGenerator(5, 5, 5);
     if (window.screen.availWidth >= 600){
       countBlock.classList.remove('passive');
       headerAccordionText.innerHTML = 'Страница 1 из 2';
@@ -161,45 +162,30 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
 
-  function accordionTextGenerator(){
-    const questions = document.querySelectorAll('.question');
-    const inputs = document.querySelectorAll('.question__input');
-    const checkboxes = document.querySelectorAll('.question-checkbox__input');
-    const voutedTestQuestion = document.querySelectorAll('.question-answers-list__item-btn-active');
+  function accordionTextGenerator(yesPoints, noPoints, dnPoints){
+    const voutedAnswers = document.querySelectorAll('.question-answers-list__item-btn-active');
 
-    const questionAmount = questions.length;
+    const points = Math.max(yesPoints, noPoints, dnPoints);
+    const questionsPoints = answersLists.length * points;
     let count=0;
 
-    for(let i=0; i<inputs.length; i++){
-      if(inputs[i].value){
-        count++;
-      };
-
-      inputs[i].addEventListener('blur', () => {
-        accordionTextGenerator();
-      });
-    };
-
-    for(let i=0; i<checkboxes.length; i++){
-      if(checkboxes[i].checked){
-        count++;
-      };
-
-      checkboxes[i].addEventListener('click', () => {
-        accordionTextGenerator();
-      });
-    };
-
-    for(let i=0; i<voutedTestQuestion.length; i++){
-      count++;
+    for(let i=0; i<voutedAnswers.length; i++){
+      if(voutedAnswers[i].classList.contains('yes-btn')){
+        count+=yesPoints;
+        console.log(count);
+      } else if(voutedAnswers[i].classList.contains('no-btn')){
+        count+=noPoints;
+      } else if(voutedAnswers[i].classList.contains('dn-btn')){
+        count+=dnPoints;
+      } 
     }
 
-    const percent = count*100/questionAmount;
+    const percent = count*100/questionsPoints;
 
     if (window.screen.availWidth > 600){
-      countText.innerHTML = `${count} / ${questionAmount} (${percent}%)`;
+      countText.innerHTML = `${count} / ${questionsPoints} (${percent}%)`;
     } else {
-      headerAccordionText.innerHTML = `Страница 1 из 2 - Оценка: ${count} из ${questionAmount} (${percent}%)`;
+      headerAccordionText.innerHTML = `Страница 1 из 2 - Оценка: ${count} из ${questionsPoints} (${percent}%)`;
     };
   };
 
