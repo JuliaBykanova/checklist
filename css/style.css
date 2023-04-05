@@ -382,7 +382,6 @@ body {
 }
 
 .question-file{
-  flex-direction: column;
   margin-bottom: 16px;
 }
 
@@ -396,6 +395,11 @@ body {
 .question-file__img-block{
   width: 94px;
   height: 75px;
+  display: inline-block;
+}
+
+.question-file__img-block:not(:last-child){
+  margin-right: 8px;
 }
 
 .question-file__img{
@@ -413,6 +417,10 @@ body {
   background-repeat: no-repeat;
   background-position: center left 10px;
   background-image: url(../img/pdf.svg);
+}
+
+.question-file__text-block:not(:last-child){
+  margin-bottom: 8px;
 }
 
 .question-file__text{
