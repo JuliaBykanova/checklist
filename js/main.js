@@ -15,7 +15,35 @@ document.addEventListener("DOMContentLoaded", () => {
     countBlock.classList.add('passive');
   };
 
-  
+  const checkboxes = document.querySelectorAll('.question-checkbox__input');
+
+  checkboxes.forEach((checkbox) => {
+    checkbox.addEventListener('click', () => {
+      const questionContainer = checkbox.closest('.question-container');
+      if(questionContainer.querySelector('.question__star-obligatory')){
+        if (checkbox.checked){
+          questionContainer.classList.remove('question-container-obligatory');
+        } else {
+          questionContainer.classList.add('question-container-obligatory');
+        };
+      };
+    });
+  });
+
+  const inputs = document.querySelectorAll('.question__input');
+
+  inputs.forEach((input) => {
+    input.addEventListener('input', () => {
+      const questionContainer = input.closest('.question-container');
+      if(questionContainer.querySelector('.question__star-obligatory')){
+        if (input.value){
+          questionContainer.classList.remove('question-container-obligatory');
+        } else {
+          questionContainer.classList.add('question-container-obligatory');
+        };
+      };
+    });
+  });  
 
   answersLists.forEach((answersList) => {
     const answersBtns = answersList.querySelectorAll('.question-answers-list__item-btn');
@@ -30,6 +58,11 @@ document.addEventListener("DOMContentLoaded", () => {
           };
         };
         accordionTextGenerator(5, 5, 5);
+        const questionContainer = answersBtn.closest('.question-container-obligatory');
+        if (questionContainer){
+          questionContainer.classList.remove('question-container-obligatory');
+        }
+        
       });
     });
   })
@@ -40,42 +73,50 @@ document.addEventListener("DOMContentLoaded", () => {
 
   noteBtns.forEach((noteBtn) => {
     noteBtn.addEventListener('click', () => {
-      const note = document.createElement('div');
-      const noteText = document.createElement('span');
       const noteInput = document.createElement('input');
 
-      note.classList.add('question-note', 'flex');
-      noteText.classList.add('question-note__text');
       noteInput.classList.add('question-note__input', 'input-resert');
 
       noteInput.type = 'text';
       noteInput.placeholder = 'Введите текст заметки...';
-      noteText.innerHTML = 'Текст заметки...';
 
-      noteInput.oninput = () => {
-        noteText.innerHTML = noteInput.value;
-      };
-
-      note.append(noteText);
-      note.append(noteInput);
-
-      noteBtn.closest('.question-action-list').classList.add('question-action-list-active');
-      noteBtn.closest('.question-container').append(note);
+      noteBtn.closest('.question-action-list').before(noteInput);
     });
   });
 
-  const fileInputs = document.querySelectorAll('#file-input');
+  const fileInputs = document.querySelectorAll('.question-action-list__item-input');
 
   fileInputs.forEach((fileInput) => {
     fileInput.onchange = function () {
-      console.log('Selected file: ' + this.value);
 
-      const fileText = document.createElement('p');
-      fileText.classList.add('question-file__text');
-      fileText.innerHTML = 'Выбранный файл: ' + this.value;
+      const fileBox = document.createElement('div');
+      const fileTitle = document.createElement('span');
+      const fileBlock = document.createElement('div');
+      
 
-      this.closest('.question-action-list').classList.add('question-action-list-active');
-      this.closest('.question-container').append(fileText);
+      fileBox.classList.add('question-file', 'flex');
+      fileTitle.classList.add('question-file__title');
+      fileTitle.innerHTML = 'Медиа';
+      
+
+      if (this.value.includes('.png') || this.value.includes('.jpg') || this.value.includes('.svg')){
+        fileBlock.classList.add('question-file__img-block');
+        const fileImg = document.createElement('img');
+        fileImg.classList.add('question-file__img');
+        fileImg.src = "https://mobimg.b-cdn.net/v3/fetch/f2/f2689a880e15cbb49bd267f84689111a.jpeg?w=1470&r=0.5625";
+        console.log(this.files);
+        fileBlock.append(fileImg);
+      } else{
+        const fileText = document.createElement('p');
+        fileBlock.classList.add('question-file__text-block');
+        fileText.classList.add('question-file__text');
+        fileText.innerHTML = this.value;
+        fileBlock.append(fileText);
+      };
+    
+      fileBox.append(fileTitle);
+      fileBox.append(fileBlock);
+      this.closest('.question-action-list').before(fileBox);
     };
   });
 
@@ -136,13 +177,23 @@ document.addEventListener("DOMContentLoaded", () => {
       const select = this.closest('.select');
       const selectIcon = this.closest('.select').querySelector('.select__icon');
       const currentText = select.querySelector('.select__current');
-      if (window.screen.availWidth >= 600){
-        currentText.innerText = text;
+      if(this.classList.contains('header-select__item')){
+        if (window.screen.availWidth >= 600){
+          currentText.innerText = text;
+        } else{
+          currentText.innerText = text + ' -' + currentText.innerHTML.split('-')[1];
+        };
       } else{
-        currentText.innerText = text + ' -' + currentText.innerHTML.split('-')[1];
+        currentText.innerText = text;
       }
+      
       select.classList.remove('is-active');
       selectIcon.classList.remove('rotate');
+
+      const questionContainer = this.closest('.question-container-obligatory');
+        if (questionContainer){
+          questionContainer.classList.remove('question-container-obligatory');
+        }
     }
   
   };
@@ -172,7 +223,6 @@ document.addEventListener("DOMContentLoaded", () => {
     for(let i=0; i<voutedAnswers.length; i++){
       if(voutedAnswers[i].classList.contains('yes-btn')){
         count+=yesPoints;
-        console.log(count);
       } else if(voutedAnswers[i].classList.contains('no-btn')){
         count+=noPoints;
       } else if(voutedAnswers[i].classList.contains('dn-btn')){
