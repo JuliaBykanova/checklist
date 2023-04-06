@@ -88,16 +88,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   fileInputs.forEach((fileInput) => {
     fileInput.onchange = function () {
+      let fileBox = this.closest('.question-container').querySelector('.question-file');
+      if(!fileBox){
+        fileBox = document.createElement('div');
+        const fileTitle = document.createElement('h3');
 
-      const fileBox = document.createElement('div');
-      const fileTitle = document.createElement('span');
+        fileBox.classList.add('question-file');
+        fileTitle.classList.add('question-file__title');
+        fileTitle.innerHTML = 'Медиа';
+
+        fileBox.append(fileTitle);
+      }
+
       const fileBlock = document.createElement('div');
-      
-
-      fileBox.classList.add('question-file', 'flex');
-      fileTitle.classList.add('question-file__title');
-      fileTitle.innerHTML = 'Медиа';
-      
 
       if (this.value.includes('.png') || this.value.includes('.jpg') || this.value.includes('.svg')){
         fileBlock.classList.add('question-file__img-block');
@@ -110,11 +113,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const fileText = document.createElement('p');
         fileBlock.classList.add('question-file__text-block');
         fileText.classList.add('question-file__text');
-        fileText.innerHTML = this.value;
+        fileText.innerHTML = this.files[0].name;
         fileBlock.append(fileText);
       };
     
-      fileBox.append(fileTitle);
+      
       fileBox.append(fileBlock);
       this.closest('.question-action-list').before(fileBox);
     };
