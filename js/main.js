@@ -3,14 +3,21 @@ document.addEventListener("DOMContentLoaded", () => {
   const countBlock = document.querySelector('.header__count-block');
   const countText = document.querySelector('.header__count');
   const answersLists = document.querySelectorAll('.question-answers-list');
+  const navigateBtnNext = document.querySelector('.navigate__btn-next');
+  const navigateBtnBack = document.querySelector('.navigate__btn-back');
+  const pages = document.querySelectorAll('.page');
+  let currentPage = 1;
+  const pageAmount = pages.length;
 
   accordionTextGenerator(5, 5, 5);
   select();
   accordion();
 
+  navigateBtnNext.querySelector('.navigate__btn-info').innerHTML = `Страница ${currentPage+1}/${pageAmount}`;
+
   if (window.screen.availWidth >= 600){
     countBlock.classList.remove('passive');
-    headerAccordionText.innerHTML = 'Страница 1 из 2';
+    headerAccordionText.innerHTML = `Страница ${currentPage} из ${pageAmount}`;
   } else {
     countBlock.classList.add('passive');
   };
@@ -123,30 +130,42 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   });
 
-  const navigateBtnNext = document.querySelector('.navigate__btn-next');
-  const navigateBtnBack = document.querySelector('.navigate__btn-back');
-
-  navigateBtnNext.addEventListener('click', () => {
-    navigateBtnNext.classList.add('passive');
-    navigateBtnBack.classList.remove('passive');
-    navigateBtnNext.closest('.navigate-container').classList.add('navigate-container-back');
-    if (window.screen.availWidth >= 600){
-      headerAccordionText.innerText = 'Страница 2 из 2';
-    } else{
-      headerAccordionText.innerText = 'Страница 2 из 2' + ' -' + headerAccordionText.innerHTML.split('-')[1];
-    }
+  navigateBtnNext.addEventListener('click', () => {  
+    flippNextPage(); 
   });
 
   navigateBtnBack.addEventListener('click', () => {
-    navigateBtnBack.classList.add('passive');
-    navigateBtnNext.classList.remove('passive');
-    navigateBtnNext.closest('.navigate-container').classList.remove('navigate-container-back');
-    if (window.screen.availWidth >= 600){
-      headerAccordionText.innerText = 'Страница 1 из 1';
-    } else{
-      headerAccordionText.innerText = 'Страница 1 из 2' + ' -' + headerAccordionText.innerHTML.split('-')[1];
-    }
+    flippBackPage();
   });
+
+  const submitBtn = document.getElementById('submit-btn');
+  const form = document.getElementById('form');
+
+  submitBtn.addEventListener('click', () => {
+    form.submit();
+    const submitModal = document.createElement('div');
+    const submitModalContainer = document.createElement('div');
+    const submitSpiner = document.createElement('div');
+    const submitSpinerText = document.createElement('span');
+    const submitText = document.createElement('p');
+
+    submitModal.classList.add('submit-modal', 'flex');
+    submitModalContainer.classList.add('submit-modal-container', 'flex');
+    submitSpiner.classList.add('submit-modal__spinner');
+    submitSpinerText.classList.add('submit-modal__spinner-text');
+    submitText.classList.add('submit-modal__text');
+
+    submitText.innerHTML = "Дождитесь окончания загрузки, чтобы не потерять Ваши данные";
+
+    submitSpiner.append(submitSpinerText);
+    submitModalContainer.append(submitSpiner);
+    submitModalContainer.append(submitText);
+    submitModal.append(submitModalContainer);
+
+    document.body.append(submitModal);
+
+    console.log(form.elements);
+  }) 
 
   window.addEventListener('resize', () => {
     accordionTextGenerator(5, 5, 5);
@@ -238,7 +257,58 @@ document.addEventListener("DOMContentLoaded", () => {
     if (window.screen.availWidth > 600){
       countText.innerHTML = `${count} / ${questionsPoints} (${percent}%)`;
     } else {
-      headerAccordionText.innerHTML = `Страница 1 из 2 - Оценка: ${count} из ${questionsPoints} (${percent}%)`;
+      headerAccordionText.innerHTML = `Страница ${currentPage} из ${pageAmount} - Оценка: ${count} из ${questionsPoints} (${percent}%)`;
+    };
+  };
+
+  function flippNextPage() {   
+
+    document.querySelector(`.page-${currentPage}`).classList.add('passive');
+    navigateBtnBack.querySelector('.navigate__btn-info').innerHTML = `Страница ${currentPage}/${pageAmount}`;
+    currentPage++;
+    document.querySelector(`.page-${currentPage}`).classList.remove('passive');
+    navigateBtnNext.querySelector('.navigate__btn-info').innerHTML = `Страница ${currentPage+1}/${pageAmount}`;
+
+
+    if (currentPage === 2){
+      navigateBtnBack.classList.remove('passive');
+      navigateBtnNext.closest('.navigate-container').classList.remove('navigate-container-next');
+    };
+
+    if (currentPage === pageAmount){
+      navigateBtnNext.classList.add('passive');
+      navigateBtnNext.closest('.navigate-container').classList.add('navigate-container-back');
+    };
+
+    if (window.screen.availWidth >= 600){
+      headerAccordionText.innerText = `Страница ${currentPage} из ${pageAmount}`;
+    } else{
+      headerAccordionText.innerText = `Страница ${currentPage} из ${pageAmount}` + ' -' + headerAccordionText.innerHTML.split('-')[1];
+    };
+  };
+
+  function flippBackPage() {   
+
+    document.querySelector(`.page-${currentPage}`).classList.add('passive');
+    navigateBtnNext.querySelector('.navigate__btn-info').innerHTML = `Страница ${currentPage}/${pageAmount}`;
+    currentPage--;
+    document.querySelector(`.page-${currentPage}`).classList.remove('passive');
+    navigateBtnBack.querySelector('.navigate__btn-info').innerHTML = `Страница ${currentPage-1}/${pageAmount}`;
+
+    if (currentPage === 1){
+      navigateBtnBack.classList.add('passive');
+      navigateBtnNext.closest('.navigate-container').classList.add('navigate-container-next');
+    };
+
+    if (currentPage === pageAmount-1){
+      navigateBtnNext.classList.remove('passive');
+      navigateBtnNext.closest('.navigate-container').classList.remove('navigate-container-back');
+    };
+
+    if (window.screen.availWidth >= 600){
+      headerAccordionText.innerText = `Страница ${currentPage} из ${pageAmount}`;
+    } else{
+      headerAccordionText.innerText = `Страница ${currentPage} из ${pageAmount}` + ' -' + headerAccordionText.innerHTML.split('-')[1];
     };
   };
 
