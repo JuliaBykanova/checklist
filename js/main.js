@@ -2,12 +2,23 @@ document.addEventListener("DOMContentLoaded", () => {
   const headerAccordionText = document.querySelector('.header-accordion__text');
   const countBlock = document.querySelector('.header__count-block');
   const countText = document.querySelector('.header__count');
+  const headerSelectBody = document.querySelector('.header-select__body');
   const answersLists = document.querySelectorAll('.question-answers-list');
   const navigateBtnNext = document.querySelector('.navigate__btn-next');
   const navigateBtnBack = document.querySelector('.navigate__btn-back');
   const pages = document.querySelectorAll('.page');
   let currentPage = 1;
   const pageAmount = pages.length;
+
+  for (let i = 0; i < pageAmount; i++){
+    const headerSelectItem = document.createElement('div');
+    headerSelectItem.classList.add('header-select__item', 'select__item');
+    headerSelectItem.innerHTML = `Страница ${i+1} из ${pageAmount}`;
+    headerSelectItem.onclick = function() {
+      changePage(i);
+    };
+    headerSelectBody.append(headerSelectItem);
+  };
 
   accordionTextGenerator(5, 5, 5);
   select();
@@ -73,8 +84,6 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   })
-
-  
 
   const noteBtns = document.querySelectorAll('.question-action-list__item-note-btn');
 
@@ -148,14 +157,21 @@ document.addEventListener("DOMContentLoaded", () => {
     const submitSpiner = document.createElement('div');
     const submitSpinerText = document.createElement('span');
     const submitText = document.createElement('p');
+    const submitAgainBtn = document.createElement('button');
 
     submitModal.classList.add('submit-modal', 'flex');
     submitModalContainer.classList.add('submit-modal-container', 'flex');
     submitSpiner.classList.add('submit-modal__spinner');
     submitSpinerText.classList.add('submit-modal__spinner-text');
     submitText.classList.add('submit-modal__text');
+    submitAgainBtn.classList.add('submit-modal__btn', 'btn-resert');
 
     submitText.innerHTML = "Дождитесь окончания загрузки, чтобы не потерять Ваши данные";
+    submitAgainBtn.innerHTML = 'Пройти еще раз';
+
+    submitAgainBtn.onclick = () => {
+      submitModal.remove();
+    }
 
     submitSpiner.append(submitSpinerText);
     submitModalContainer.append(submitSpiner);
@@ -163,6 +179,13 @@ document.addEventListener("DOMContentLoaded", () => {
     submitModal.append(submitModalContainer);
 
     document.body.append(submitModal);
+
+    setTimeout(() => {
+      submitText.innerHTML = "Проверка завершена";
+      submitText.classList.add('submit-modal__text-end');
+      submitSpiner.remove();
+      submitModalContainer.append(submitAgainBtn);
+    }, 4000);
 
     console.log(form.elements);
   }) 
@@ -311,5 +334,29 @@ document.addEventListener("DOMContentLoaded", () => {
       headerAccordionText.innerText = `Страница ${currentPage} из ${pageAmount}` + ' -' + headerAccordionText.innerHTML.split('-')[1];
     };
   };
+
+  function changePage(i) {   
+    navigateBtnBack.closest('.navigate-container').classList.remove('navigate-container-back');
+    navigateBtnNext.closest('.navigate-container').classList.remove('navigate-container-next');
+    navigateBtnBack.classList.remove('passive');
+    navigateBtnNext.classList.remove('passive');
+
+    document.querySelector(`.page-${currentPage}`).classList.add('passive');
+    currentPage = i+1;
+    document.querySelector(`.page-${currentPage}`).classList.remove('passive');
+
+    navigateBtnBack.querySelector('.navigate__btn-info').innerHTML = `Страница ${currentPage-1}/${pageAmount}`; 
+    navigateBtnNext.querySelector('.navigate__btn-info').innerHTML = `Страница ${currentPage+1}/${pageAmount}`;
+
+    if (currentPage === 1){
+      navigateBtnBack.classList.add('passive');
+      navigateBtnBack.closest('.navigate-container').classList.add('navigate-container-next');
+    };
+
+    if (currentPage === pageAmount){
+      navigateBtnNext.classList.add('passive');
+      navigateBtnNext.closest('.navigate-container').classList.add('navigate-container-back');
+    };
+  }
 
 })

@@ -579,6 +579,11 @@ body {
 }
 
 
+.submit-modal__text-end{
+  margin-bottom: 32px;
+}
+
+
 @keyframes border-animate {
   0% {
     border-top-color: transparent;
@@ -658,7 +663,7 @@ body {
   left: 0px;
   border-width: 32px;
   border-style:  solid;
-  animation: border-animate 4s infinite;
+  animation: border-animate 4s;
   transform: rotate(45deg);
   }
   
@@ -694,6 +699,15 @@ body {
   font-size: 16px;
   line-height: 24px;
   color: #AAABAD;
-  animation: procent 4s infinite;
+  animation: procent 4s;
+}
+
+.submit-modal__btn{
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: #FBC333;
+  font-size: 14px;
+  line-height: 24px;
+  color: #2B2D32;
 }
 
