@@ -122,9 +122,18 @@ document.addEventListener("DOMContentLoaded", () => {
         fileBlock.classList.add('question-file__img-block');
         const fileImg = document.createElement('img');
         fileImg.classList.add('question-file__img');
-        fileImg.src = "https://mobimg.b-cdn.net/v3/fetch/f2/f2689a880e15cbb49bd267f84689111a.jpeg?w=1470&r=0.5625";
-        console.log(this.files);
-        fileBlock.append(fileImg);
+
+        const file = this.files[0];
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function() {
+          fileImg.src = reader.result;
+        };
+        reader.onerror = function() {
+          console.log(reader.error);
+        };
+
+        fileBlock.append(fileImg);    
       } else{
         const fileText = document.createElement('p');
         fileBlock.classList.add('question-file__text-block');
